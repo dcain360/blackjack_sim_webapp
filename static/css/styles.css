@@ -1,3 +1,36 @@
+/* using this pallette btw:
+    light-gray: #959bb5
+    Darkest:  #0a1123
+    mid dark: #3a3e6c
+    light-blue: #8387c3
+    mid-gray: #8a8cac
+*/
+body {
+    background-color: #0a1123;
+}
+
 p {
-    background-color: chartreuse;
+    color: #8a8cac;
+}
+
+header {
+    color: #959bb5;
+}
+
+
+table,th,td {
+    color: #959bb5;
+    border: 1px solid #959bb5;
+}
+
+
+table {
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+input {
+    width: 100%;
+    box-sizing: border-box;
 }
