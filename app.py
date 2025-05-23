@@ -14,9 +14,8 @@ def index():
 @app.route('/submit', methods=['POST'])
 def submit():
     data = request.get_json()
-    print(data)
-    with open('output.txt', 'w') as f:
-        for key, value in data.items():
-            f.write(f'{key}: {value}\n')
+    
+    df = pd.DataFrame([data])
 
+    print(df)
     return 'Data saved successfully!'
