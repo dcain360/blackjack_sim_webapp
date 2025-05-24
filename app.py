@@ -11,11 +11,13 @@ import pandas as pd
 def index():
     return render_template('index.html')
 
-@app.route('/submit', methods=['POST'])
-def submit():
-    data = request.get_json()
-    
-    df = pd.DataFrame([data])
+@app.route('/submit-table', methods=['POST'])
+def submit_table():
+    content = request.get_json()
+    table_data = content.get('table', [])
+
+    df = pd.DataFrame(table_data)
 
     print(df)
-    return 'Data saved successfully!'
+
+    return "Data received and processed into DataFrame"
