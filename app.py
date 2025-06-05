@@ -4,6 +4,7 @@
 
 from flask import Flask, render_template, request
 from models.Player import Player
+from models.Sim import Sim 
 
 app = Flask(__name__)
 import pandas as pd
@@ -17,9 +18,10 @@ def submit_table():
     content = request.get_json()
     table_data = content.get('table', [])
     
-    
+    sim = Sim()
     player_strategy = pd.DataFrame(table_data)
     player = Player("Hermann")
+    sim.run()
     player.print()
     print(player_strategy)
 
