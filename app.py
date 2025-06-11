@@ -3,8 +3,7 @@
 
 
 from flask import Flask, render_template, request
-from models.Player import Player
-from models.Sim import Sim 
+from models.simulation import BlackjackSimulation
 
 app = Flask(__name__)
 import pandas as pd
@@ -18,9 +17,7 @@ def submit_table():
     content = request.get_json()
     table_data = content.get('table', [])
     
-    sim = Sim(pd.DataFrame(table_data))
-    player = Player("Hermann")
-    sim.run()
-    player.print()
-
+    sim = BlackjackSimulation()
+    sim.run_simulation()
+   
     return "Data received and processed into DataFrame"
