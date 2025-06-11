@@ -18,11 +18,9 @@ def submit_table():
     content = request.get_json()
     table_data = content.get('table', [])
     
-    sim = Sim()
-    player_strategy = pd.DataFrame(table_data)
+    sim = Sim(pd.DataFrame(table_data))
     player = Player("Hermann")
     sim.run()
     player.print()
-    print(player_strategy)
 
     return "Data received and processed into DataFrame"
