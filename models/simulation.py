@@ -60,10 +60,9 @@ class BlackjackSimulation:
     def __init__(self, num_rounds=10):  # Reduced default for readability
         self.num_rounds = num_rounds
         self.deck = Deck(num_decks=6)
-        self.results = {'Player': 0, 'Dealer': 0, 'Push': 0}
-
+        self.results = {'Player': 0, 'Dealer': 0, 'Push': 0} # map used to track outcome of hands
     def _player_turn(self, player_hand, dealer_upcard):
-        """Automated player follows basic strategy with verbose output."""
+        """Returns string that determines the action the player will do"""
         print(f"\nPlayer's hand: {player_hand} (Value: {player_hand.value})")
         print(f"Dealer's upcard: {dealer_upcard}")
 
@@ -94,7 +93,7 @@ class BlackjackSimulation:
                 return 'stand'
 
     def _dealer_turn(self, dealer_hand):
-        """Dealer hits on soft 17 with verbose output."""
+        """Dealer hits on soft 17"""
         print(f"\nDealer's turn: {dealer_hand} (Value: {dealer_hand.value})")
         while dealer_hand.value < 17 or (dealer_hand.value == 17 and dealer_hand.aces > 0):
             new_card = self.deck.deal()
