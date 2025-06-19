@@ -1,4 +1,5 @@
 import random
+import pandas as pd
 
 class Card:
     def __init__(self, suit, rank):
@@ -55,12 +56,19 @@ class Hand:
 
     def __str__(self):
         return ', '.join(map(str, self.cards))
+    
+    def __len__(self):
+        return len(self.cards)
+    
 
 class BlackjackSimulation:
-    def __init__(self, num_rounds=10):  # Reduced default for readability
+    def __init__(self,strategy: pd.DataFrame, num_rounds=10):  # Reduced default for readability
         self.num_rounds = num_rounds
         self.deck = Deck(num_decks=6)
         self.results = {'Player': 0, 'Dealer': 0, 'Push': 0} # map used to track outcome of hands
+        self.strategy = strategy
+        print(self.strategy)
+
     def _player_turn(self, player_hand, dealer_upcard):
         """Returns string that determines the action the player will do"""
         print(f"\nPlayer's hand: {player_hand} (Value: {player_hand.value})")
@@ -68,6 +76,10 @@ class BlackjackSimulation:
 
         while True:
             # Hard totals
+            if len(player_hand)==2:
+                if player_hand.aces==1:
+                    print(f"number of aces -> f{player_hand.aces}")
+                if player_hand
             if player_hand.value >= 17:
                 print("Player strategy: Stand (≥17)")
                 return 'stand'
@@ -153,6 +165,11 @@ class BlackjackSimulation:
                     if player_hand.value > 21:
                         print("Player busts!")
                         break
+                elif action == 'double':
+                    new_card = self.deck.deal()
+                    player_hand.add_card(new_card)
+                    print(f"Player doubles: {new_card} -> {player_hand} (Value: {player_hand.value})")
+                    break
                 else:
                     print("Player stands.")
                     break

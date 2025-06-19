@@ -15,9 +15,11 @@ def index():
 @app.route('/submit-table', methods=['POST'])
 def submit_table():
     content = request.get_json()
-    table_data = content.get('table', [])
-    
-    sim = BlackjackSimulation()
+    table_data = content.get('table', []) # using javascript to get strategy table
+
+    strategy = pd.DataFrame(table_data) # Converting table to DataFrame
+
+    sim = BlackjackSimulation(strategy)
     sim.run_simulation()
    
     return "Data received and processed into DataFrame"
