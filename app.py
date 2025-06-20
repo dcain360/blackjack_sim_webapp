@@ -19,7 +19,10 @@ def submit_table():
 
     strategy = pd.DataFrame(table_data) # Converting table to DataFrame
 
-    sim = BlackjackSimulation(strategy)
-    sim.run_simulation()
+    print(strategy)
+
+    
+    #sim = BlackjackSimulation()
+    #sim.run_simulation(strategy)
    
     return "Data received and processed into DataFrame"

@@ -60,16 +60,18 @@ class Hand:
     def __len__(self):
         return len(self.cards)
     
-
+    def __getitem__(self, index):
+        return self.cards[index]
+    
+#strategy: pd.DataFrame
 class BlackjackSimulation:
-    def __init__(self,strategy: pd.DataFrame, num_rounds=10):  # Reduced default for readability
+    def __init__(self, num_rounds=10):  # Reduced default for readability
         self.num_rounds = num_rounds
         self.deck = Deck(num_decks=6)
         self.results = {'Player': 0, 'Dealer': 0, 'Push': 0} # map used to track outcome of hands
-        self.strategy = strategy
-        print(self.strategy)
+        
 
-    def _player_turn(self, player_hand, dealer_upcard):
+    def _player_turn(self, player_hand, strategy: pd.DataFrame, dealer_upcard):
         """Returns string that determines the action the player will do"""
         print(f"\nPlayer's hand: {player_hand} (Value: {player_hand.value})")
         print(f"Dealer's upcard: {dealer_upcard}")
@@ -77,9 +79,10 @@ class BlackjackSimulation:
         while True:
             # Hard totals
             if len(player_hand)==2:
-                if player_hand.aces==1:
-                    print(f"number of aces -> f{player_hand.aces}")
-                if player_hand
+                if player_hand.aces>=1:
+                    print("TODO: implement soft ace")
+                if player_hand[0]._get_value()==player_hand[1]._get_value():
+                    print("TODO: implement splitting")
             if player_hand.value >= 17:
                 print("Player strategy: Stand (≥17)")
                 return 'stand'
@@ -137,7 +140,7 @@ class BlackjackSimulation:
             print("Result: Push (Tie)")
             return 'Push'
 
-    def run_simulation(self):
+    def run_simulation(self, strategy: pd.DataFrame):
         print(f"=== Starting {self.num_rounds} rounds of Blackjack ===\n")
         # main loop
         for round_num in range(1, self.num_rounds + 1):
@@ -146,7 +149,7 @@ class BlackjackSimulation:
             dealer_hand = Hand()
 
             # Deal initial cards
-            player_hand.add_card(self.deck.deal())
+            player_hand.add_card(self.deck.deal()) 
             dealer_hand.add_card(self.deck.deal())
             player_hand.add_card(self.deck.deal())
             dealer_hand.add_card(self.deck.deal())
@@ -157,7 +160,7 @@ class BlackjackSimulation:
 
             # Player's turn (automated)
             while True:
-                action = self._player_turn(player_hand, dealer_hand.cards[0].rank)
+                action = self._player_turn(player_hand, strategy, dealer_hand.cards[0].rank)
                 if action == 'hit':
                     new_card = self.deck.deal()
                     player_hand.add_card(new_card)
@@ -169,6 +172,9 @@ class BlackjackSimulation:
                     new_card = self.deck.deal()
                     player_hand.add_card(new_card)
                     print(f"Player doubles: {new_card} -> {player_hand} (Value: {player_hand.value})")
+                    break
+                elif action == 'split':
+                    print("TODO: implement splitting")
                     break
                 else:
                     print("Player stands.")
@@ -193,3 +199,23 @@ class BlackjackSimulation:
         print(f"Pushes: {self.results['Push']} ({self.results['Push']/total:.1%})")
 
 # Run simulation
+
+'''
+def main():
+    sim = BlackjackSimulation()
+    sim.run_simulation()
+
+    
+    hand = Hand()
+    card1 = Card('♠', '4')
+    card2 = Card('♠', '9')
+    hand.add_card(card1)
+    hand.add_card(card2)
+
+    print(hand[0])
+    
+
+
+if __name__=="__main__":
+    main()
+'''    
