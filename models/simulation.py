@@ -103,8 +103,39 @@ class BlackjackSimulation:
         
         while True:
             # Hard totals
+            if len(player_hand)==2 and player_hand.aces==1 and player_hand.value < 21:
+                print("In aces and 2 cards")
+                if str(player_hand[0]).find('A') != -1:
+                    idx1 = 'A' + ',' + str(player_hand[1])
+                    idx2 = idx2 = self._get_dealer_index(dealer_upcard.value)
+                    print(f"idx1 = {idx1}, idx2 = {idx2}")
+                    action = strategy.loc[idx1,idx2]
+                    print(action)
+                    return action  
+                    # I put idx2 assignment in both branches for readibility but maybe it would be better to put it outside the if else
+                else:
+                    idx1 = 'A' + ',' + str(player_hand[0])
+                    idx2 = self._get_dealer_index(dealer_upcard.value)
+                    print(f"idx1 = {idx1}, idx2 = {idx2}")
+                    action = strategy.loc[idx1,idx2]
+                    print(action)
+                    return action    
+            elif len(player_hand)==2 and player_hand[0]==player_hand[1]:
+                print("in 2 cards and cards are equal")
+                idx1=str(player_hand[0]) + ',' + str(player_hand[1])
+                idx2=self._get_dealer_index(dealer_upcard.value)
+                print(f"idx1 = {idx1}, idx2 = {idx2}")
+                action = strategy.loc[idx1,idx2]
+                print(action)
+                return action
+            
             if player_hand.value > 17:
-                return 'S'
+                    if player_hand.value==21 and len(player_hand)==2:
+                        return 'BJ'
+                    else:
+                        return 'S'
+            elif player_hand.value < 8: 
+                    return 'H'
             print("Entered _player_turn() while loop")
             '''
             if len(player_hand)==2:
@@ -115,7 +146,7 @@ class BlackjackSimulation:
             '''
             print("reached else in _player_turn()")
             idx1 = str(player_hand.value)
-            idx2 =  self._get_dealer_index(dealer_upcard.value)
+            idx2 = self._get_dealer_index(dealer_upcard.value)
 
             print(f"idx1 = {idx1}, idx2 = {idx2}")
             action = strategy.loc[idx1,idx2]
@@ -201,7 +232,10 @@ class BlackjackSimulation:
             while True:
                 action = self._player_turn(player_hand, strategy, dealer_hand.cards[0])
                 print(f"Action -> {action}")
-                if action == 'H':
+                if action == 'BJ':
+                    print("Player got blackjack")
+                    break
+                elif action == 'H':
                     new_card = self.deck.deal()
                     player_hand.add_card(new_card)
                     print(f"Player hits: {new_card} → {player_hand} (Value: {player_hand.value})")
