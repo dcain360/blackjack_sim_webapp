@@ -70,19 +70,58 @@ class BlackjackSimulation:
         self.deck = Deck(num_decks=6)
         self.results = {'Player': 0, 'Dealer': 0, 'Push': 0} # map used to track outcome of hands
         
-
+    def _get_dealer_index(self, dealer_upcard_value):
+        print("Able to call _get_dealer_index()")
+        match dealer_upcard_value:
+            case 2:
+                return 'col1'
+            case 3:
+                return 'col2'
+            case 4:
+                return 'col3'
+            case 5:
+                return 'col4'
+            case 6:
+                return 'col5'
+            case 7:
+                return 'col6'
+            case 8:
+                return 'col7'
+            case 9:
+                return 'col8'
+            case 10:
+                return 'col9'
+            case 11:
+                return 'col10'
+            case _:
+                return 'invalid card'
+             
     def _player_turn(self, player_hand, strategy: pd.DataFrame, dealer_upcard):
         """Returns string that determines the action the player will do"""
         print(f"\nPlayer's hand: {player_hand} (Value: {player_hand.value})")
         print(f"Dealer's upcard: {dealer_upcard}")
-
+        
         while True:
             # Hard totals
+            if player_hand.value > 17:
+                return 'S'
+            print("Entered _player_turn() while loop")
+            '''
             if len(player_hand)==2:
                 if player_hand.aces>=1:
                     print("TODO: implement soft ace")
                 if player_hand[0]._get_value()==player_hand[1]._get_value():
                     print("TODO: implement splitting")
+            '''
+            print("reached else in _player_turn()")
+            idx1 = str(player_hand.value)
+            idx2 =  self._get_dealer_index(dealer_upcard.value)
+
+            print(f"idx1 = {idx1}, idx2 = {idx2}")
+            action = strategy.loc[idx1,idx2]
+            
+            return action
+            '''
             if player_hand.value >= 17:
                 print("Player strategy: Stand (≥17)")
                 return 'stand'
@@ -106,7 +145,7 @@ class BlackjackSimulation:
             else:
                 print(f"Player strategy: Stand ({player_hand.value} vs dealer {dealer_upcard})")
                 return 'stand'
-
+            '''
     def _dealer_turn(self, dealer_hand):
         """Dealer hits on soft 17"""
         print(f"\nDealer's turn: {dealer_hand} (Value: {dealer_hand.value})")
@@ -158,22 +197,23 @@ class BlackjackSimulation:
             print(f"Player: {player_hand.cards[0]}, {player_hand.cards[1]} (Value: {player_hand.value})")
             print(f"Dealer: {dealer_hand.cards[0]}, ?")
 
-            # Player's turn (automated)
+            # Player's turn 
             while True:
-                action = self._player_turn(player_hand, strategy, dealer_hand.cards[0].rank)
-                if action == 'hit':
+                action = self._player_turn(player_hand, strategy, dealer_hand.cards[0])
+                print(f"Action -> {action}")
+                if action == 'H':
                     new_card = self.deck.deal()
                     player_hand.add_card(new_card)
                     print(f"Player hits: {new_card} → {player_hand} (Value: {player_hand.value})")
                     if player_hand.value > 21:
                         print("Player busts!")
                         break
-                elif action == 'double':
+                elif action == 'D':
                     new_card = self.deck.deal()
                     player_hand.add_card(new_card)
                     print(f"Player doubles: {new_card} -> {player_hand} (Value: {player_hand.value})")
                     break
-                elif action == 'split':
+                elif action == 'Y':
                     print("TODO: implement splitting")
                     break
                 else:

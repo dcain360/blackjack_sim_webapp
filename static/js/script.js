@@ -5,6 +5,8 @@ document.getElementById('table-form').addEventListener('submit', function(event)
     const rows = table.querySelectorAll('tr');
     const data = [];
 
+
+    // main logic for extracting table from html
     for (let i = 2; i < rows.length; i++) {  // skip header rows
         const cells = rows[i].querySelectorAll('td');
         if (cells.length === 0) continue;

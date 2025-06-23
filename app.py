@@ -18,11 +18,12 @@ def submit_table():
     table_data = content.get('table', []) # using javascript to get strategy table
 
     strategy = pd.DataFrame(table_data) # Converting table to DataFrame
-
+    strategy = strategy.set_index('label')
     print(strategy)
+    print(strategy.loc['10', 'col6'])
 
     
-    #sim = BlackjackSimulation()
-    #sim.run_simulation(strategy)
+    sim = BlackjackSimulation()
+    sim.run_simulation(strategy)
    
     return "Data received and processed into DataFrame"
