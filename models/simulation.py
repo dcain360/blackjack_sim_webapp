@@ -69,9 +69,16 @@ class BlackjackSimulation:
         self.num_rounds = num_rounds
         self.deck = Deck(num_decks=6)
         self.results = {'Player': 0, 'Dealer': 0, 'Push': 0} # map used to track outcome of hands
-        
+
+    def _get_action(self, strategy, phand_value, dealer_upcard):
+        idx1 = str(phand_value)
+        if 'A' in  idx1:
+            idx1 = 'A'
+        idx2 = self._get_dealer_index(dealer_upcard.value)
+        action = strategy.loc[idx1, idx2]
+        return action   
+    
     def _get_dealer_index(self, dealer_upcard_value):
-        print("Able to call _get_dealer_index()")
         match dealer_upcard_value:
             case 2:
                 return 'col1'
@@ -136,22 +143,8 @@ class BlackjackSimulation:
                         return 'S'
             elif player_hand.value < 8: 
                     return 'H'
-            print("Entered _player_turn() while loop")
-            '''
-            if len(player_hand)==2:
-                if player_hand.aces>=1:
-                    print("TODO: implement soft ace")
-                if player_hand[0]._get_value()==player_hand[1]._get_value():
-                    print("TODO: implement splitting")
-            '''
-            print("reached else in _player_turn()")
-            idx1 = str(player_hand.value)
-            idx2 = self._get_dealer_index(dealer_upcard.value)
-
-            print(f"idx1 = {idx1}, idx2 = {idx2}")
-            action = strategy.loc[idx1,idx2]
-            
-            return action
+            else:
+                return self._get_action(strategy, player_hand.value, dealer_upcard)
             '''
             if player_hand.value >= 17:
                 print("Player strategy: Stand (≥17)")

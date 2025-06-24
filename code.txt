@@ -34,3 +34,17 @@ input {
 
 
 https://musiclab.chromeexperiments.com/Song-Maker/song/6486079487737856
+
+
+player turn logic 
+
+
+if aces > 0:
+
+else:
+    if phand > 17:
+        stand
+    elif phand < 8:
+        hit
+    else:
+        return table_data[phand.value, dealer_upcard]
